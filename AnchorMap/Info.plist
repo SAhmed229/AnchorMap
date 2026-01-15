@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>&quot;Location is used to map where your scans were taken&quot;</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>&quot;Location is used to map where your scans were taken&quot;</string>
+	<key>NSCameraUsageDescription</key>
+	<string>&quot;This app needs camera access to create 3D scans&quot;
+</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+    <key>NSCameraUsageDescription</key>
+    <string>This app needs camera access to create 3D scans</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Location is used to map where your scans were taken</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Location is used to map where your scans were taken</string>
+</dict>
+</plist>
