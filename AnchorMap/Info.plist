@@ -2,22 +2,25 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>nScamera</key>
+	<string></string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>&quot;Location is used to map where your scans were taken&quot;</string>
+	<string>Location is used to map where your scans were taken</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>&quot;Location is used to map where your scans were taken&quot;</string>
+	<string>Location is used to map where your scans were taken</string>
 	<key>NSCameraUsageDescription</key>
-	<string>&quot;This app needs camera access to create 3D scans&quot;
-</string>
+	<string>This app needs camera access to create 3D scans</string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleExecutable</key>
+	<string></string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
 	</array>
-    <key>NSCameraUsageDescription</key>
-    <string>This app needs camera access to create 3D scans</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Location is used to map where your scans were taken</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Location is used to map where your scans were taken</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Kosugi-Regular.ttf</string>
+	</array>
 </dict>
 </plist>

@@ -6,12 +6,34 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct AnchorMapApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TabView {
+                MapView()
+                    .tabItem {
+                        Label("Map", systemImage: "map")
+                    }
+
+                ContentView()
+                    .tabItem {
+                        Label("Scan", systemImage: "camera.viewfinder")
+                    }
+
+                ExploreView()
+                    .tabItem {
+                        Label("Explore", systemImage: "globe")
+                    }
+
+                FetchModelView()
+                    .tabItem {
+                        Label("Library", systemImage: "list.bullet")
+                    }
+            }
         }
+        .modelContainer(for: ScanRecord.self)
     }
 }

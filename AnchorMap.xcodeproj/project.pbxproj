@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3D162FA32F30959000E62FC6 /* FetchModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D162FA22F30958400E62FC6 /* FetchModelView.swift */; };
+		3D22FA4A2F2BE2FE00A36C47 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D22FA492F2BE2FE00A36C47 /* ContentView.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		3DBB791B2EA3F876003E24C2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,13 +29,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3D162FA22F30958400E62FC6 /* FetchModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchModelView.swift; sourceTree = "<group>"; };
+		3D22FA492F2BE2FE00A36C47 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3DBB790D2EA3F874003E24C2 /* AnchorMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnchorMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DBB791A2EA3F876003E24C2 /* AnchorMapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnchorMapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DBB79242EA3F876003E24C2 /* AnchorMapUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnchorMapUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		3DBB79392EA41AF2003E24C2 /* Exceptions for "AnchorMap" folder in "AnchorMap" target */ = {
+		3D22FA4E2F2BF6F200A36C47 /* Exceptions for "AnchorMap" folder in "AnchorMap" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -43,7 +50,7 @@
 		3DBB790F2EA3F874003E24C2 /* AnchorMap */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				3DBB79392EA41AF2003E24C2 /* Exceptions for "AnchorMap" folder in "AnchorMap" target */,
+				3D22FA4E2F2BF6F200A36C47 /* Exceptions for "AnchorMap" folder in "AnchorMap" target */,
 			);
 			path = AnchorMap;
 			sourceTree = "<group>";
@@ -88,6 +95,8 @@
 		3DBB79042EA3F874003E24C2 = {
 			isa = PBXGroup;
 			children = (
+				3D162FA22F30958400E62FC6 /* FetchModelView.swift */,
+				3D22FA492F2BE2FE00A36C47 /* ContentView.swift */,
 				3DBB790F2EA3F874003E24C2 /* AnchorMap */,
 				3DBB791D2EA3F876003E24C2 /* AnchorMapTests */,
 				3DBB79272EA3F876003E24C2 /* AnchorMapUITests */,
@@ -249,6 +258,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D22FA4A2F2BE2FE00A36C47 /* ContentView.swift in Sources */,
+				3D162FA32F30959000E62FC6 /* FetchModelView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

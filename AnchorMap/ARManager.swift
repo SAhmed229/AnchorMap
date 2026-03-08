@@ -19,36 +19,13 @@ import CoreLocation
     let locationManager = CLLocationManager()
     let currentUserLocation = PassthroughSubject<CLLocationCoordinate2D, Never>()
     private var cancellables = Set<AnyCancellable>()
+
+    var lastKnownLocation: CLLocationCoordinate2D?
+
     override init()
     {
         super.init()
         locationManager.delegate = self
-    }
-    func startLidarScan()
-    {
-        if ARWorldTrackingConfiguration.supportsSceneReconstruction(.mesh)
-        {
-            worldConfig.sceneReconstruction = .mesh
-        }
-        if ARWorldTrackingConfiguration.supportsFrameSemantics(.sceneDepth) {
-            worldConfig.frameSemantics.insert(.sceneDepth)
-        }
-        session.run(worldConfig)
-    }
-    func startGeoTracking()
-    {
-        session.run(geoConfig)
-    }
-    func locationManager(_ manager: CLLocationManager,
-                         didUpdateLocations locations: [CLLocation])
-    {
-
-        if let newest = locations.last
-        {
-            let coordinate = newest.coordinate
-            currentUserLocation.send(coordinate)
-            
-        }
     }
 
     func requestLocation()
@@ -64,6 +41,19 @@ import CoreLocation
             break
         }
     }
+
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        lastKnownLocation = location.coordinate
+        currentUserLocation.send(location.coordinate)
+    }
+
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways {
+            manager.startUpdatingLocation()
+        }
+    }
+
     func geotagScan(withName name: String)
     {
         currentUserLocation
