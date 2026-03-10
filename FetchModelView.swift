@@ -96,6 +96,11 @@ struct FetchModelView: View {
     }
 
     private func deleteScan(_ scan: ScanRecord) {
+        if scan.isPublic {
+            Task {
+                try? await CloudKitManager.shared.unpublishScan(scan)
+            }
+        }
         scan.deleteFiles()
         modelContext.delete(scan)
     }

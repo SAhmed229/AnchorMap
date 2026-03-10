@@ -97,6 +97,11 @@ struct ScanDetailView: View {
             }
             .alert("Delete Scan", isPresented: $showDeleteConfirmation) {
                 Button("Delete", role: .destructive) {
+                    if scan.isPublic {
+                        Task {
+                            try? await CloudKitManager.shared.unpublishScan(scan)
+                        }
+                    }
                     scan.deleteFiles()
                     modelContext.delete(scan)
                     onDelete?()
