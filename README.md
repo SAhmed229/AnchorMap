@@ -2,8 +2,16 @@
 
 An iOS app that uses LiDAR to capture 3D room scans, colorizes them in real time, and lets users geotag and share scans on a collaborative map via CloudKit.
 
-<!-- Add a demo GIF or screenshot here -->
-<!-- ![Demo](assets/demo.gif) -->
+<table>
+  <tr>
+    <td align="center"><img src="screenshots/IMG_8895.PNG" width="200"><br><b>Map View</b></td>
+    <td align="center"><img src="screenshots/IMG_8894.PNG" width="200"><br><b>3D Scan Detail</b></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="screenshots/IMG_8890.PNG" width="200"><br><b>Library</b></td>
+    <td align="center"><img src="screenshots/IMG_8889.PNG" width="200"><br><b>Explore</b></td>
+  </tr>
+</table>
 
 ## Features
 
