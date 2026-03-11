@@ -61,13 +61,5 @@ AnchorMap/
 - Xcode 15+
 - Apple Developer account (for CloudKit container setup and distribution)
 
-### Setup
-
-1. Clone the repo
-   ```bash
-   git clone https://github.com/SAhmed229/AnchorMap.git
-   ```
-2. Open `AnchorMap.xcodeproj` in Xcode
-3. Set your development team under Signing & Capabilities
-4. Configure the CloudKit container (`iCloud.com.ahmedshousha.AnchorMap`) or replace with your own
-5. Build and run on a LiDAR-equipped device
+### Setup  
+Download on the App Store
