@@ -2,13 +2,12 @@
 //  CloudKitManager.swift
 //  AnchorMap
 //
-//  Created by Ahmed Shousha on 05/03/2026.
+//  Created by Ahmed Shousha on 02/11/2026.
 //
 
 import Foundation
 import CloudKit
 import CoreLocation
-import UIKit
 
 @Observable
 class CloudKitManager {
@@ -20,11 +19,13 @@ class CloudKitManager {
     var isUploading = false
     var uploadError: String?
 
+    private var fetchCache: (key: String, scans: [PublicScan], date: Date)?
+
     private init() {}
 
     // MARK: - Publish
 
-    func publishScan(_ record: ScanRecord) async throws -> CKRecord.ID {
+    func publishScan(_ record: ScanRecord, uploaderName: String) async throws -> CKRecord.ID {
         guard let fileURL = record.fileURL,
               FileManager.default.fileExists(atPath: fileURL.path) else {
             throw CloudKitError.fileNotFound
@@ -36,7 +37,7 @@ class CloudKitManager {
         ckRecord["longitude"] = record.longitude as CKRecordValue
         ckRecord["location"] = CLLocation(latitude: record.latitude, longitude: record.longitude) as CKRecordValue
         ckRecord["date"] = record.date as CKRecordValue
-        ckRecord["uploaderName"] = (UIDevice.current.name) as CKRecordValue
+        ckRecord["uploaderName"] = uploaderName as CKRecordValue
         ckRecord["scanFile"] = CKAsset(fileURL: fileURL)
 
         if let thumbnailData = record.thumbnailData {
@@ -62,6 +63,15 @@ class CloudKitManager {
     // MARK: - Fetch Public Scans
 
     func fetchPublicScans(near location: CLLocation, radiusKm: Double) async throws -> [PublicScan] {
+        let cacheKey = String(format: "%.2f,%.2f,%.0f",
+                              location.coordinate.latitude,
+                              location.coordinate.longitude,
+                              radiusKm)
+        if let cache = fetchCache, cache.key == cacheKey,
+           Date().timeIntervalSince(cache.date) < 60 {
+            return cache.scans
+        }
+
         let radiusMeters = radiusKm * 1000
         let predicate = NSPredicate(
             format: "distanceToLocation:fromLocation:(location, %@) < %f",
@@ -73,10 +83,12 @@ class CloudKitManager {
         do {
             let (results, _) = try await publicDatabase.records(matching: query, resultsLimit: 50)
 
-            return results.compactMap { _, result in
+            let scans: [PublicScan] = results.compactMap { _, result in
                 guard let record = try? result.get() else { return nil }
                 return PublicScan(record: record)
             }
+            fetchCache = (cacheKey, scans, Date())
+            return scans
         } catch let error as CKError where error.code == .unknownItem {
             return []  // Record type not yet created — not an error
         }

@@ -1,13 +1,14 @@
 ////  Mesh+Ext.swift
 //  AnchorMap
 //  Created by Ahmed Shousha on 10/12/2025.
-// code from:
+// code adapted from:
 //  VirtualShowrooms
 //  Created by Kelvin J on 5/25/23.
 //
 
 import RealityKit
 import ARKit
+import SceneKit
 import SceneKit
 
 struct MeshData {
@@ -186,5 +187,26 @@ extension ARMeshGeometry {
 
         let positions = worldVertices.map { SCNVector3($0.x, $0.y, $0.z) }
         return MeshData(positions: positions, colors: vertexColors, indices: indices)
+    }
+}
+
+extension SCNNode {
+    func enableVertexColors() {
+        if let geometry = geometry {
+            let hasColors = geometry.sources.contains { $0.semantic == .color }
+            if hasColors {
+                for material in geometry.materials {
+                    material.lightingModel = .constant
+                }
+                if geometry.materials.isEmpty {
+                    let material = SCNMaterial()
+                    material.lightingModel = .constant
+                    geometry.materials = [material]
+                }
+            }
+        }
+        for child in childNodes {
+            child.enableVertexColors()
+        }
     }
 }

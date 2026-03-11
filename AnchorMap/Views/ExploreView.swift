@@ -2,7 +2,7 @@
 //  ExploreView.swift
 //  AnchorMap
 //
-//  Created by Ahmed Shousha on 05/03/2026.
+//  Created by Ahmed Shousha on 05/01/2026.
 //
 
 import SwiftUI
@@ -96,6 +96,7 @@ struct ExploreView: View {
             } message: {
                 Text(errorMessage ?? "Unknown error")
             }
+
             .overlay {
                 if !isLoading && publicScans.isEmpty {
                     ContentUnavailableView("No Public Scans Yet",
@@ -152,27 +153,8 @@ struct ExploreView: View {
 
     private func loadScene(from url: URL) -> SCNScene {
         let scene = (try? SCNScene(url: url)) ?? SCNScene()
-        enableVertexColors(in: scene.rootNode)
+        scene.rootNode.enableVertexColors()
         return scene
-    }
-
-    private func enableVertexColors(in node: SCNNode) {
-        if let geometry = node.geometry {
-            let hasColors = geometry.sources.contains { $0.semantic == .color }
-            if hasColors {
-                for material in geometry.materials {
-                    material.lightingModel = .constant
-                }
-                if geometry.materials.isEmpty {
-                    let material = SCNMaterial()
-                    material.lightingModel = .constant
-                    geometry.materials = [material]
-                }
-            }
-        }
-        for child in node.childNodes {
-            enableVertexColors(in: child)
-        }
     }
 }
 
