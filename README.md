@@ -58,8 +58,6 @@ AnchorMap/
 
 - iOS 17.0+
 - iPhone/iPad with LiDAR sensor (iPhone 12 Pro or later)
-- Xcode 15+
-- Apple Developer account (for CloudKit container setup and distribution)
-
+  
 ### Setup  
 Download on the App Store
