@@ -290,39 +290,79 @@ class ExportViewModel: NSObject {
         let scene = SCNScene()
 
         for anchor in meshAnchors {
-            let meshData = anchor.geometry.extractMeshData(modelMatrix: anchor.transform, keyframes: keyframes)
+            let meshData = anchor.geometry.extractTexturedMeshData(
+                modelMatrix: anchor.transform, keyframes: keyframes
+            )
 
             // Position source
             let positionSource = SCNGeometrySource(vertices: meshData.positions)
 
-            // Color source — pack as [Float] with stride 3 (no SIMD padding)
-            var colorFloats = [Float]()
-            colorFloats.reserveCapacity(meshData.colors.count * 3)
-            for c in meshData.colors {
-                colorFloats.append(c.x)
-                colorFloats.append(c.y)
-                colorFloats.append(c.z)
+            // Texcoord source — pack SIMD2<Float> as contiguous [Float] pairs
+            var uvFloats = [Float]()
+            uvFloats.reserveCapacity(meshData.texCoords.count * 2)
+            for uv in meshData.texCoords {
+                uvFloats.append(uv.x)
+                uvFloats.append(uv.y)
             }
-            let colorData = Data(bytes: colorFloats, count: colorFloats.count * MemoryLayout<Float>.size)
-            let colorSource = SCNGeometrySource(
-                data: colorData,
-                semantic: .color,
-                vectorCount: meshData.colors.count,
+            let uvData = Data(bytes: uvFloats, count: uvFloats.count * MemoryLayout<Float>.size)
+            let texCoordSource = SCNGeometrySource(
+                data: uvData,
+                semantic: .texcoord,
+                vectorCount: meshData.texCoords.count,
                 usesFloatComponents: true,
-                componentsPerVector: 3,
+                componentsPerVector: 2,
                 bytesPerComponent: MemoryLayout<Float>.size,
                 dataOffset: 0,
-                dataStride: MemoryLayout<Float>.size * 3
+                dataStride: MemoryLayout<Float>.size * 2
             )
 
-            // Triangle indices
-            let element = SCNGeometryElement(indices: meshData.indices, primitiveType: .triangles)
+            // Build one element + material per keyframe group
+            var elements: [SCNGeometryElement] = []
+            var materials: [SCNMaterial] = []
 
-            let geometry = SCNGeometry(sources: [positionSource, colorSource], elements: [element])
-            let material = SCNMaterial()
-            material.lightingModel = .constant
-            material.isDoubleSided = true
-            geometry.materials = [material]
+            for group in meshData.triangleGroups {
+                guard !group.indices.isEmpty else { continue }
+
+                let element = SCNGeometryElement(indices: group.indices, primitiveType: .triangles)
+                elements.append(element)
+
+                // Decode this keyframe's image lazily (one at a time for memory efficiency)
+                let material = SCNMaterial()
+                material.lightingModel = .constant
+                material.isDoubleSided = true
+                if group.keyframeIndex < keyframes.count,
+                   let image = UIImage(data: keyframes[group.keyframeIndex].jpegData) {
+                    material.diffuse.contents = image
+                    material.diffuse.wrapS = .clamp
+                    material.diffuse.wrapT = .clamp
+                    material.diffuse.magnificationFilter = .linear
+                    material.diffuse.minificationFilter = .linear
+                    material.diffuse.mipFilter = .linear
+                }
+                materials.append(material)
+            }
+
+            // Fallback element for triangles with no matching keyframe
+            if !meshData.fallbackIndices.isEmpty {
+                let fallbackElement = SCNGeometryElement(
+                    indices: meshData.fallbackIndices, primitiveType: .triangles
+                )
+                elements.append(fallbackElement)
+
+                let fallbackMaterial = SCNMaterial()
+                fallbackMaterial.lightingModel = .constant
+                fallbackMaterial.isDoubleSided = true
+                fallbackMaterial.diffuse.contents = UIColor.white
+                materials.append(fallbackMaterial)
+            }
+
+            guard !elements.isEmpty else { continue }
+
+            let geometry = SCNGeometry(
+                sources: [positionSource, texCoordSource],
+                elements: elements
+            )
+            geometry.materials = materials
 
             let node = SCNNode(geometry: geometry)
             scene.rootNode.addChildNode(node)
